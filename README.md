@@ -1,73 +1,96 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+## Table of Contents
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+- [Description](#description)
+- [How it works](#how-it-works)
+- [Technical details](#technical-details)
+- [Installation](#installation)
+- [Usage](#usage)
+- [TODO](#todo)
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Non-blocking CLI based application to recursively crawl data from whole pages on websites in parallel and save the results to HTML output.
+
+![Overview](./assets/overview.png)
+
+## How it works
+
+- Open pages using [Playwright](https://playwright.dev/).
+- On pages, find new link elements that have an HTML `a` tag on the page.
+- Filter only links that point to the same domain and are allowed in `robots.txt`.
+- Add links to the request queue.
+- Skips duplicate URLs.
+- Visit recently queued links.
+- Repeat the process.
+
+## Technical details
+
+- Tech stack: [Node.js](https://nodejs.org/en), [TypeScript](https://www.typescriptlang.org/), [NestJs](https://nestjs.com/), [Playwright](https://playwright.dev/)
 
 ## Installation
 
-```bash
-$ npm install
-```
+- Requirements
 
-## Running the app
+  - Node.js >= 18
 
-```bash
-# development
-$ npm run start
+- Clone this repository
 
-# watch mode
-$ npm run start:dev
+  ```bash
+  $ https://github.com/yusuftaufiq/cmlabs-backend-crawler-freelance-test.git
+  ```
 
-# production mode
-$ npm run start:prod
-```
+- Change to the cloned directory and install all required dependencies (may take a while)
 
-## Test
+  ```bash
+  $ npm install
+  ```
 
-```bash
-# unit tests
-$ npm run test
+- Build the application
 
-# e2e tests
-$ npm run test:e2e
+  ```bash
+  $ npm run build
+  ```
 
-# test coverage
-$ npm run test:cov
-```
+- Start the CLI application, all the features can be seen in the following [section](#usage)
+  ```bash
+  $ npm run start:prod -- crawl
+  ```
+  If the command is launched successfully, all results will be available in [./storage/key_value_stores](./storage/key_value_stores)
 
-## Support
+## Usage
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+- Show all available commands
+  ```bash
+  $ npm run start:prod -- --help
+  $ npm run start:prod -- crawl --help
+  ```
+- Customize targets to be crawled. (default: https://cmlabs.co/ https://www.sequence.day/ https://yusuftaufiq.com)
+  ```bash
+  $ npm run start:prod -- crawl https://books.toscrape.com/ https://quotes.toscrape.com/
+  ```
+- Control the verbosity of log messages (choices: "off", "error", "soft_fail", "warning", "info", "debug", "perf", default: "info")
+  ```bash
+  $ npm run start:prod -- crawl --log-level warning
+  ```
+- Sets the maximum concurrency (parallelism) for the crawl (default: 15)
+  ```bash
+  $ npm run start:prod -- crawl --max-concurrency 100
+  ```
+- Maximum number of pages that the crawler will open. The crawl will stop when this limit is reached. (default: 50)
+  ```bash
+  $ npm run start:prod -- crawl --max-requests 1000
+  ```
+- Timeout by which the function must complete, in seconds. (default: 30)
+  ```bash
+  $ npm run start:prod -- crawl --timeout 10
+  ```
+- Whether to run the browser in headful mode. (default: false)
+  ```bash
+  $ npm run start:prod -- crawl --headful
+  ```
 
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+## TODO
+- Prioritize sitemap.xml
+- Add proxies
+- Watch out for honeypots
+- Adopt CAPTCHA solving service

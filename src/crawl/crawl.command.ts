@@ -10,7 +10,17 @@ import { CrawlOptionsDto } from './dto/crawl-options.dto';
 import { DEFAULT_TARGETS } from './constants/default-targets.constant';
 import { LOG_LEVEL } from './constants/log-level.constant';
 
-@Command({ name: 'crawl', arguments: '[targets]' })
+@Command({
+  name: 'crawl',
+  arguments: '[targets]',
+  description:
+    'Recursively crawl data from whole pages on websites and save the results to HTML output',
+  argsDescription: {
+    targets:
+      'Target URLs separated by a space with valid HTTP protocols. ' +
+      '(default: https://cmlabs.co/ https://www.sequence.day/ https://yusuftaufiq.com)',
+  },
+})
 export class CrawlCommand extends CommandRunner {
   constructor(private readonly crawlService: CrawlService) {
     super();
@@ -48,6 +58,7 @@ export class CrawlCommand extends CommandRunner {
     defaultValue: 'info',
     name: 'logLevel',
     choices: true,
+    description: 'Control the verbosity of log messages',
   })
   parseLogLevel(option: string) {
     const index = LOG_LEVEL.findIndex((level) => level === option);
@@ -69,6 +80,7 @@ export class CrawlCommand extends CommandRunner {
   @Option({
     flags: '--max-concurrency <max-concurrency>',
     defaultValue: 15,
+    description: 'Sets the maximum concurrency (parallelism) for the crawl',
   })
   parseMaxConcurrency(maxConcurrency: string) {
     const value = Number(maxConcurrency);
@@ -83,6 +95,10 @@ export class CrawlCommand extends CommandRunner {
   @Option({
     flags: '--max-requests <max-requests>',
     defaultValue: 50,
+    description:
+      'Maximum number of pages that the crawler will open. ' +
+      'The crawl will stop when this limit is reached. ' +
+      'This value should always be set in order to prevent infinite loops in misconfigured crawlers.',
   })
   parseMaxRequests(maxRequests: string) {
     const value = Number(maxRequests);
@@ -97,6 +113,7 @@ export class CrawlCommand extends CommandRunner {
   @Option({
     flags: '--timeout <timeout>',
     defaultValue: 30,
+    description: 'Timeout by which the function must complete, in seconds.',
   })
   parseTimeout(timeout: string) {
     const value = Number(timeout);
@@ -111,6 +128,7 @@ export class CrawlCommand extends CommandRunner {
   @Option({
     flags: '--headful',
     defaultValue: false,
+    description: 'Whether to run browser in headful mode.',
   })
   parseHeadful() {
     return true;
