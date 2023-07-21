@@ -112,9 +112,9 @@ export class CrawlCommand extends CommandRunner {
 
   @Option({
     flags: '--headful',
-    defaultValue: true,
+    defaultValue: false,
   })
   parseHeadful() {
-    return false;
+    return true;
   }
 }
