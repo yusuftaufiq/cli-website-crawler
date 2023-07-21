@@ -29,8 +29,6 @@ export class CrawlCommand extends CommandRunner {
       targets,
     });
 
-    console.log(options);
-
     this.crawlService.crawl(crawlOptions);
   }
 
