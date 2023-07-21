@@ -36,3 +36,7 @@ lerna-debug.log*
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+# Storage
+storage/request_queues
+storage/key_value_stores/default
