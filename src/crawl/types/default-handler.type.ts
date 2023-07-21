@@ -1,5 +1,5 @@
 import { router } from '../crawl.routes';
 
 export type DefaultHandlerType = Parameters<
-  (typeof router)['addDefaultHandler']
+  ReturnType<typeof router>['addDefaultHandler']
 >[0];

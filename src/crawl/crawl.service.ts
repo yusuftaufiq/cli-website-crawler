@@ -2,9 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { BrowserErrorHandler, PlaywrightCrawler, log } from 'crawlee';
 import { router } from './crawl.routes';
 import { CrawlOptionsDto } from './dto/crawl-options.dto';
+import { RobotsService } from '../robots/robots.service';
 
 @Injectable()
 export class CrawlService {
+  constructor(private readonly robotsService: RobotsService) {}
+
   async crawl({
     targets,
     logLevel,
@@ -15,6 +18,7 @@ export class CrawlService {
   }: CrawlOptionsDto) {
     log.setLevel(logLevel);
 
+    const robotsParsers = await this.robotsService.parseFrom(targets);
     const crawler = new PlaywrightCrawler({
       headless: !headful,
       minConcurrency: 5,
@@ -22,7 +26,7 @@ export class CrawlService {
       maxRequestRetries: 1,
       requestHandlerTimeoutSecs: timeout,
       maxRequestsPerCrawl,
-      requestHandler: router,
+      requestHandler: router({ robotsParsers }),
       failedRequestHandler: this.onFailedRequest,
     });
 
