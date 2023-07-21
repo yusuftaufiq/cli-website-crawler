@@ -26,6 +26,8 @@ Non-blocking CLI based application to recursively crawl data from whole pages on
 ## Technical details
 
 - Tech stack: [Node.js](https://nodejs.org/en), [TypeScript](https://www.typescriptlang.org/), [NestJs](https://nestjs.com/), [Playwright](https://playwright.dev/)
+- Data structures: [Hash Map](./src/robots/robots.service.ts#L29), [Hash Set](./src/crawl/handlers/default.handler.ts#L40) for high performance O(1) constant insertion and retrieval.
+- Architectures: modules, services, and commands separated by feature purpose.
 
 ## Installation
 
