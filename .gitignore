@@ -40,3 +40,6 @@ lerna-debug.log*
 # Storage
 storage/request_queues
 storage/key_value_stores/default
+
+# NestJs
+.nestjs_repl_history
